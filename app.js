@@ -3,15 +3,26 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const path = require('path');
 const app = express();
-const port = 6000;
+const port = 2000;
+
 const {getHomePage} = require('./routes/index');
+const {addEmployeePage, addEmployee} = require('./routes/employee');
 
 // create connection to database
-const db = mysql.createConnection ({
+/*const db = mysql.createConnection ({
     host: 'mysqldb.c1bknsb7z2cn.us-east-2.rds.amazonaws.com',
     user: 'mysqldb',
     password: 'mysqldbpass',
     database: 'mysqldb'
+});
+*/
+
+// create connection to database
+const db = mysql.createConnection ({
+    host: 'localhost',
+    user: 'root',
+    password: 'mysqlpassword',
+    database: 'employee'
 });
 
 // connect to database
@@ -32,6 +43,8 @@ app.use(bodyParser.json()); // parse form data client
 app.use(express.static(path.join(__dirname, 'public'))); // configure express to use public folder
 
 app.get('/', getHomePage);
+app.get('/add', addEmployeePage);
+app.post('/add', addEmployee);
 
 // set the app to listen on the port
 app.listen(port, () => {
